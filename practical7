@@ -1,0 +1,148 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node {
+    int data;
+    struct node *next;
+};
+
+struct node *s = NULL;
+struct node* Insert_Beg(struct node *top) {
+    struct node *r = (struct node*)malloc(sizeof(struct node));
+    if (!r) {
+        printf("Memory allocation failed.\n");
+        return top;
+    }
+    printf("Enter data: ");
+    scanf("%d", &r->data);
+    
+    if (top == NULL) {
+        r->next = r;
+        return r;
+    }
+
+    struct node *t = top;
+    while (t->next != top) {
+        t = t->next;
+    }
+    t->next = r;
+    r->next = top;
+    return r;
+}
+struct node* Insert_End(struct node *top) {
+    struct node *r = (struct node*)malloc(sizeof(struct node));
+    if (!r) {
+        printf("Memory allocation failed.\n");
+        return top;
+    }
+    printf("Enter data: ");
+    scanf("%d", &r->data);
+    
+    if (top == NULL) {
+        r->next = r;
+        return r;
+    }
+
+    struct node *t = top;
+    while (t->next != top) {
+        t = t->next;
+    }
+    t->next = r;
+    r->next = top;
+    return top;
+}
+struct node* Delete_Beg(struct node *top) {
+    if (top == NULL) {
+        printf("List is empty!\n");
+        return NULL;
+    }
+    
+    if (top->next == top) {
+        free(top);
+        return NULL;
+    }
+
+    struct node *last = top;
+    while (last->next != top) {
+        last = last->next;
+    }
+    struct node *temp = top;
+    last->next = top->next;
+    top = top->next;
+    free(temp);
+    return top;
+}
+struct node* Delete_End(struct node *top) {
+    if (top == NULL) {
+        printf("List is empty!\n");
+        return NULL;
+    }
+    
+    if (top->next == top) {
+        free(top);
+        return NULL;
+    }
+
+    struct node *temp = top;
+    struct node *prev = NULL;
+    while (temp->next != top) {
+        prev = temp;
+        temp = temp->next;
+    }
+    prev->next = top;
+    free(temp);
+    return top;
+}
+void Display_List(struct node *top) {
+    if (top == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+    struct node *t = top;
+    printf("Current list: ");
+    do {
+        printf("%d -> ", t->data);
+        t = t->next;
+    } while (t != top);
+    printf("(head)\n");
+}
+
+int main() {
+    int op;
+    s = NULL;
+    do {
+        printf("\nMenu:\n");
+        printf("1. Insert at Beginning\n");
+        printf("2. Insert at End\n");
+        printf("3. Delete from Beginning\n");
+        printf("4. Delete from End\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &op);
+
+        switch (op) {
+            case 1:
+                s = Insert_Beg(s);
+                Display_List(s);
+                break;
+            case 2:
+                s = Insert_End(s);
+                Display_List(s);
+                break;
+            case 3:
+                s = Delete_Beg(s);
+                Display_List(s);
+                break;
+            case 4:
+                s = Delete_End(s);
+                Display_List(s);
+                break;
+            case 5:
+                printf("Exiting program.\n");
+                break;
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    } while (op != 5);
+
+    return 0;
+}
